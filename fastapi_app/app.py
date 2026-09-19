@@ -7,15 +7,17 @@ import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from fastapi_app.text_processing import normalize_text
+from text_processing import normalize_text
+
+
+## Use it when you want run the "app.py" in a local enviorment
+## like (mlops_venv) PS D:\MLOPS\Lecture_21_Docker\fastapi_app> uvicorn app:app --reload --port 8000
+# mlflow.set_tracking_uri("https://dagshub.com/pranay-majumder/Docker_Pipeline_CI_CD.mlflow")
+# dagshub.init(repo_owner="pranay-majumder", repo_name="Docker_Pipeline_CI_CD", mlflow=True)
 
 
 # MLflow + DagsHub
-#mlflow.set_tracking_uri("https://dagshub.com/pranay-majumder/ml-project-using-mlops4.mlflow")
-#dagshub.init(repo_owner="pranay-majumder",repo_name="ml-project-using-mlops4",mlflow=True)
-
-# MLflow + DagsHub
-# Set up DagsHub credentials for MLflow tracking
+# Set up DagsHub credentials for MLflow tracking (Usefull for GitHub Actions CI/CD Pipeline)
 dagshub_token = os.getenv("DAGSHUB_TOKEN")
 if not dagshub_token:
     raise EnvironmentError("DAGSHUB_TOKEN environment variable is not set")
@@ -25,7 +27,7 @@ os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
 dagshub_url = "https://dagshub.com"
 repo_owner = "pranay-majumder"
-repo_name = "CI_Pipeline_full"
+repo_name = "Docker_Pipeline_CI_CD"
 
 # Set up MLflow tracking URI
 mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
@@ -44,7 +46,8 @@ class TextRequest(BaseModel):
 
 
 # Load BoW Vectorizer
-with open("./models/vectorizer.pkl", "rb") as file:
+# with open("../models/vectorizer.pkl", "rb") as file:  ## For Local Use
+with open("./models/vectorizer.pkl", "rb") as file:     ## For Docker Use (See Dockerfile and Understand Folder Structure)
     vectorizer = pickle.load(file)
 
 
