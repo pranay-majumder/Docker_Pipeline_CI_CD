@@ -16,8 +16,9 @@ from sklearn.metrics import (
 
 
 # MLflow + DagsHub
-# mlflow.set_tracking_uri("https://dagshub.com/pranay-majumder/ml-project-using-mlops4.mlflow")
-# dagshub.init(repo_owner="pranay-majumder",repo_name="ml-project-using-mlops4",mlflow=True)
+# mlflow.set_tracking_uri("https://dagshub.com/pranay-majumder/Docker_Pipeline_CI_CD.mlflow")
+# dagshub.init(repo_owner="pranay-majumder", repo_name="Docker_Pipeline_CI_CD", mlflow=True)
+
 
 # MLflow + DagsHub
 # Set up DagsHub credentials for MLflow tracking
@@ -30,7 +31,7 @@ os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
 dagshub_url = "https://dagshub.com"
 repo_owner = "pranay-majumder"
-repo_name = "CI_Pipeline_full"
+repo_name = "Docker_Pipeline_CI_CD"
 
 # Set up MLflow tracking URI
 mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')

@@ -20,4 +20,4 @@ EXPOSE 8000
 
 # CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 # Gunicorn + Uvicorn workers
-CMD ["gunicorn", "app_main:app", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--workers", "2", "--access-logfile", "-"]
+CMD ["gunicorn", "app_async:app", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--workers", "2", "--access-logfile", "-"]

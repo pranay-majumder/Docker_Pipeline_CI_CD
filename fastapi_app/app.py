@@ -12,6 +12,7 @@ from text_processing import normalize_text
 
 ## Use it when you want run the "app.py" in a local enviorment
 ## like (mlops_venv) PS D:\MLOPS\Lecture_21_Docker\fastapi_app> uvicorn app:app --reload --port 8000
+
 # mlflow.set_tracking_uri("https://dagshub.com/pranay-majumder/Docker_Pipeline_CI_CD.mlflow")
 # dagshub.init(repo_owner="pranay-majumder", repo_name="Docker_Pipeline_CI_CD", mlflow=True)
 
