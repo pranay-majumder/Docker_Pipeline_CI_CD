@@ -7,7 +7,12 @@ from nltk.stem import WordNetLemmatizer
 logger = logging.getLogger("text_processing")
 
 lemmatizer = WordNetLemmatizer()
+
+# Load English stop words
 stop_words = set(stopwords.words("english"))
+
+# Keep negation words because they are important for sentiment analysis
+stop_words -= {"not", "no", "never", "neither", "nor"}
 
 
 def lower_case(text):

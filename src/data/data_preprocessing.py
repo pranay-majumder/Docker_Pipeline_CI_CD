@@ -38,9 +38,17 @@ def lemmatization(text):
     return " ".join(text)
 
 def remove_stop_words(text):
-    """Remove stop words from the text."""
+    """Remove stop words but preserve negation words for sentiment analysis."""
     stop_words = set(stopwords.words("english"))
-    text = [word for word in str(text).split() if word not in stop_words]
+
+    # Keep negation words because they are important for sentiment
+    stop_words -= {"not", "no", "never", "neither", "nor"}
+
+    text = [
+        word for word in str(text).split()
+        if word not in stop_words
+    ]
+
     return " ".join(text)
 
 def removing_numbers(text):
