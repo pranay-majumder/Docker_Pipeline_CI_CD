@@ -10,15 +10,16 @@ from pydantic import BaseModel
 from text_processing import normalize_text
 
 
-## Use it when you want run the "app.py" in a local enviorment
-## like (mlops_venv) PS D:\MLOPS\Lecture_21_Docker\fastapi_app> uvicorn app:app --reload --port 8000
-
 # mlflow.set_tracking_uri("https://dagshub.com/pranay-majumder/Docker_Pipeline_CI_CD.mlflow")
 # dagshub.init(repo_owner="pranay-majumder", repo_name="Docker_Pipeline_CI_CD", mlflow=True)
 
 
-# MLflow + DagsHub
-# Set up DagsHub credentials for MLflow tracking (Usefull for GitHub Actions CI/CD Pipeline)
+# ============================================================
+# MLflow + DagsHub configuration
+# ============================================================
+# This Secrets (DAGSHUB_TOKEN) are already set in the Github Repository Settings. You can add them by going to Settings -> Secrets and Variables -> Actions -> New Repository Secret.
+# Set up DagsHub Credentials for MLflow tracking (Usefull for GitHub Actions CI/CD Pipeline)
+
 dagshub_token = os.getenv("DAGSHUB_TOKEN")
 if not dagshub_token:
     raise EnvironmentError("DAGSHUB_TOKEN environment variable is not set")
@@ -47,7 +48,10 @@ class TextRequest(BaseModel):
 
 
 # Load BoW Vectorizer
-# with open("../models/vectorizer.pkl", "rb") as file:  ## For Local Use
+# For running the FastAPi app locally (For Testing), you can write command like this: 
+# (mlops_venv) PS D:\MLOPS\Lecture_21_Docker> uvicorn fastapi_app.app:app --reload --port 8000
+# Don't go inside the "fastapi_app" folder, because for "models" it searches in the current working directory (Lecture_21_Docker), so if you go inside the "fastapi_app" folder, it will not find the models folder and will throw an error.
+
 with open("./models/vectorizer.pkl", "rb") as file:     ## For Docker Use (See Dockerfile and Understand Folder Structure)
     vectorizer = pickle.load(file)
 
@@ -59,7 +63,6 @@ model_name = "Sentiment_Analysis_BoW_LR"
 ## to get the current production model. This allows us to always use the latest registered model 
 ## for predictions without hardcoding a specific version number.
 
-## 
 model = mlflow.pyfunc.load_model(
     model_uri=f"models:/{model_name}@champion"
 )

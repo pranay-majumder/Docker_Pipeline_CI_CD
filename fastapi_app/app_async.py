@@ -12,9 +12,6 @@ from pydantic import BaseModel
 from text_processing import normalize_text
 
 
-## Use it when you want run the "app_async.py" in a local enviorment
-## like (mlops_venv) PS D:\MLOPS\Lecture_21_Docker\fastapi_app> uvicorn app_async:app --reload --port 8000
-
 # mlflow.set_tracking_uri("https://dagshub.com/pranay-majumder/Docker_Pipeline_CI_CD.mlflow")
 # dagshub.init(repo_owner="pranay-majumder", repo_name="Docker_Pipeline_CI_CD", mlflow=True)
 
@@ -22,7 +19,8 @@ from text_processing import normalize_text
 # ============================================================
 # MLflow + DagsHub configuration
 # ============================================================
-
+# This Secrets (DAGSHUB_TOKEN) are already set in the Github Repository Settings. You can add them by going to Settings -> Secrets and Variables -> Actions -> New Repository Secret.
+# Set up DagsHub Credentials for MLflow tracking (Usefull for GitHub Actions CI/CD Pipeline)
 dagshub_token = os.getenv("DAGSHUB_TOKEN")
 
 if not dagshub_token:
@@ -62,6 +60,11 @@ class TextRequest(BaseModel):
 # ============================================================
 # Load BoW vectorizer
 # ============================================================
+
+# Load BoW Vectorizer
+# For Running the FastAPi app Localy (For Testing), you can write command like this: 
+# (mlops_venv) PS D:\MLOPS\Lecture_21_Docker> uvicorn fastapi_app.app_async:app --reload --port 8000
+# Don't go inside the "fastapi_app" folder, because for "models" it searches in the current working directory (Lecture_21_Docker), so if you go inside the "fastapi_app" folder, it will not find the models folder and will throw an error.
 
 with open("./models/vectorizer.pkl", "rb") as file:
     vectorizer = pickle.load(file)
