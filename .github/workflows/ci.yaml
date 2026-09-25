@@ -60,3 +60,21 @@ jobs:
         if: success()
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/emotion_analysis_cicd:latest
+      
+      ## Deploy From Docker Hub to EC2 Instance
+      - name: Deploy to EC2
+        if: success()
+        uses: appleboy/ssh-action@v0.1.5
+        with: 
+          ## Store this Secrets in your GitHub repository settings. Go to Settings -> Secrets and Variables -> Actions -> New Repository Secret.
+          host: ${{ secrets.EC2_HOST }}     ## EC2_HOST is the Public IP Address of your EC2 instance. You can find it in the AWS Management Console under the EC2 service.
+          username: ${{ secrets.EC2_USER }} ## EC2_USER is the username for your EC2 instance. For Amazon Linux, the default user is "ec2-user". For Ubuntu, it is "ubuntu".
+          key: ${{ secrets.EC2_KEY }}       ## EC2_KEY is the private key associated with your EC2 instance. You can generate a "key pair" in the AWS Management Console under the EC2 service (During instance creation). Make sure to keep the private key secure and do not share it publicly.
+          script: |
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotion_analysis_cicd:latest
+            docker stop my-app || true
+            docker rm my-app || true
+            docker run -p 80:8000 -d --name my-app \
+              -e DAGSHUB_TOKEN=${{ secrets.DAGSHUB_TOKEN }} \
+              ${{ secrets.DOCKER_HUB_USERNAME }}/emotion_analysis_cicd:latest
+          
